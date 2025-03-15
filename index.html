@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Diagnosis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .report {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Patient Diagnosis System</h1>
+    <form id="patientForm">
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" step="0.1" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" step="0.1" required>
+
+        <label for="temperature">Temperature (Celsius):</label>
+        <input type="number" id="temperature" step="0.1" required>
+
+        <label for="headache">Headache? (yes/no):</label>
+        <select id="headache" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <label for="stomachPain">Stomach pain? (yes/no):</label>
+        <select id="stomachPain" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <label for="gender">Gender? (male/female):</label>
+        <select id="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+
+        <label for="dizzy">Dizziness? (yes/no):</label>
+        <select id="dizzy" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <label for="cholesterol">High cholesterol? (yes/no):</label>
+        <select id="cholesterol" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <label for="bloodPressure">Blood pressure? (low/high/normal):</label>
+        <select id="bloodPressure" required>
+            <option value="low">Low</option>
+            <option value="high">High</option>
+            <option value="normal">Normal</option>
+        </select>
+
+        <button type="submit">Add Patient</button>
+    </form>
+
+    <button onclick="diagnoseAll()">Diagnose All Patients</button>
+
+    <div id="report" class="report"></div>
+
+    <script>
+        let patients = [];
+
+        document.getElementById('patientForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const patient = {
+                weight: parseFloat(document.getElementById('weight').value),
+                height: parseFloat(document.getElementById('height').value),
+                temperature: parseFloat(document.getElementById('temperature').value),
+                headache: document.getElementById('headache').value,
+                stomachPain: document.getElementById('stomachPain').value,
+                gender: document.getElementById('gender').value,
+                dizzy: document.getElementById('dizzy').value,
+                cholesterol: document.getElementById('cholesterol').value,
+                bloodPressure: document.getElementById('bloodPressure').value
+            };
+
+            patients.push(patient);
+            alert('Patient added successfully!');
+            document.getElementById('patientForm').reset();
+        });
+
+        function diagnoseAll() {
+            const reportDiv = document.getElementById('report');
+            reportDiv.innerHTML = '';
+
+            patients.forEach((patient, index) => {
+                let diagnosis = `<h3>Patient ${index + 1} Report:</h3>`;
+                if (patient.temperature > 37.5) diagnosis += "<p>- Fever. Take Paracetamol (500mg).</p>";
+                if (patient.headache === "yes") diagnosis += "<p>- Headache. Take Ibuprofen (400mg).</p>";
+                if (patient.stomachPain === "yes") diagnosis += "<p>- Stomach pain. Take Omeprazole (20mg).</p>";
+                if (patient.dizzy === "yes") diagnosis += "<p>- Dizziness. Rest and drink water.</p>";
+                if (patient.cholesterol === "yes") diagnosis += "<p>- High cholesterol. Consult a doctor.</p>";
+                if (patient.bloodPressure === "low") diagnosis += "<p>- Low blood pressure. Increase salt intake.</p>";
+                if (patient.bloodPressure === "high") diagnosis += "<p>- High blood pressure. Consult a doctor.</p>";
+
+                const bmi = patient.weight / ((patient.height / 100) ** 2);
+                if (bmi > 25) diagnosis += "<p>- Overweight. Exercise and eat healthy.</p>";
+                else if (bmi < 18.5) diagnosis += "<p>- Underweight. Consult a nutritionist.</p>";
+                else diagnosis += "<p>- Healthy weight.</p>";
+
+                reportDiv.innerHTML += diagnosis;
+            });
+        }
+    </script>
+</body>
+</html>
